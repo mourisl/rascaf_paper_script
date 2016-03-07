@@ -9,9 +9,15 @@ To obtain the feasible connection set:
 	perl Tools/FluxCoordToRefCoord.pl tmp_read1.fq ~/data/rcorrector/simulate/simulate_pair_100M.gtf > sim_chr1+12.coords
 	perl /Tools/FindTrueConnections.pl ref.fa sim_chr1+12.coords > tmp.true
 
-Evaluate the connection result:
+Run tools and evaluate the connection result:
 	./rascaf -b ~/data/rascaf/chr1+12/sim_chr1+12.sorted.bam -f ~/data/rascaf/chr1+12/ref.fa 
 	perl ../Tools/EvaluateRascaf.pl ~/data/rascaf/chr1+12/tmp.true rascaf.out
+
+	python ./agouti.py scaffold -assembly ~/data/rascaf/chr1+12/ref.fa -bam ~/data/rascaf/chr1+12/sim_chr1+12.sorted_n.bam -gff sim_chr1+12.sorted.gff -outdir sim_chr1+12
+
+	~/Softwares/trinityrnaseq-2.0.6/Trinity --max_memory 10G --seqType fq --left ~/data/rascaf/chr1+12/tmp_read1.fq --right ~/data/rascaf/chr1+12/tmp_read2.fq --output ./trinity_out --CPU 8 
+	blat -q=rna -noHead ~/data/rascaf/chr1+12/ref.fa ../trinity_out/Trinity.fasta output.psl
+	sh ../L_RNA_scaffolder.sh  -d /home/lsong/rascaf/L_RNA_scaffolder -i blat_out/output.psl -j ~/data/rascaf/chr1+12/ref.fa -o lrnascaf_out
 
 ### Arabidopsis data sets
 The scripts are in the folder AThal.
