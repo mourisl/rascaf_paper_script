@@ -155,13 +155,11 @@ if ( defined $ARGV[2] )
 
 		for ( my $i = 0 ; $i < scalar( @contigs ) - 1 ; ++$i )		
 		{
-			my $c1 = ( split /:/, $contigs[ $i ] )[0] ;
-			my $c2 = ( split /:/, $contigs[ $i + 1 ]  ) [0] ;
+			#my $c1 = ( split /:/, $contigs[ $i ] )[0] ;
+			#my $c2 = ( split /:/, $contigs[ $i + 1 ]  ) [0] ;
 
-			if ( $c1 eq $c2 )
-			{
-				print "hi\n" ;
-			}
+			my $c1 = $contigs[$i] ;
+			my $c2 = $contigs[$i + 1] ;
 
 			if ( $c1 gt $c2 )	
 			{
