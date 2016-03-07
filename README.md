@@ -10,6 +10,7 @@ To obtain the feasible connection set:
 	perl /Tools/FindTrueConnections.pl ref.fa sim_chr1+12.coords > tmp.true
 
 Run tools and evaluate the connection result:
+	
 	./rascaf -b ~/data/rascaf/chr1+12/sim_chr1+12.sorted.bam -f ~/data/rascaf/chr1+12/ref.fa 
 	perl ../Tools/EvaluateRascaf.pl ~/data/rascaf/chr1+12/tmp.true rascaf.out
 

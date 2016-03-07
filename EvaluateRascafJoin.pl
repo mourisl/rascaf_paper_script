@@ -31,7 +31,7 @@ while ( <FP1> )
 	if ( $c1 gt $c2 )	
 	{
 		($c1, $c2)=($c2, $c1) ;
-		($s1, $s2)=($s2, $s1) ;
+		($s1, $s2)=($s1, $s2) ;
 		$s1 = $rc{ $s1 } ;
 		$s2 = $rc{ $s2 } ; 
 	}
@@ -44,29 +44,18 @@ close FP1 ;
 
 # Read in the rascaf information
 open FP2, $ARGV[1] ;
-my $start = 0 ;
 while ( <FP2> )
 {
 	chomp ;
-	last if ( /WARNING/ ) ;
-	if ( /command/ )
-	{
-		$start = 1 ;
-	}
-	elsif ( $start == 0 ) 
-	{
-		next ;
-	}
-
-	next if ( !/^[0-9]+:/ ) ;
 	my @cols = split ;
 
 	my @contigs ;
 	my @strand ;
 	my $line = $_ ;
 
-#3: (chr1_1993:175747999-175965799 217801 1 +) (chr1_1994:175965800-176132443 166644 2 +) (chr1_1996:176133195-176390208 257014 3 +) 
-	for ( my $i = 1 ; $i < @cols ; $i += 4 )
+#3: (chr1_1993:175747999-175965799 217801 1 +) (chr1_1994:175965800-176132443 166644 2 +) (chr1_1996:176133195-176390208 257014 3 +)
+#>scaffold_99 (chr12_115:7295129-7362908 118 +) (chr12_116:7362909-7389542 119 +)
+	for ( my $i = 1 ; $i < @cols ; $i += 3 )
 	{
 		my $c = substr( $cols[$i], 1 ) ;
 		if ( $c =~ /(.*?):[0-9]/ )
@@ -80,7 +69,7 @@ while ( <FP2> )
 		push @contigs, $c ;
 	}
 
-	for ( my $i = 4 ; $i < @cols ; $i += 4 )
+	for ( my $i = 3 ; $i < @cols ; $i += 3 )
 	{
 		my $c = substr( $cols[$i], 0, 1 ) ;
 		push @strand, $c ;
@@ -98,13 +87,12 @@ while ( <FP2> )
 		if ( $c1 gt $c2 )	
 		{
 			($c1, $c2)=($c2, $c1) ;
-			($s1, $s2)=($s2, $s1) ;
+			($s1, $s2)=($s1, $s2) ;
 			$s1 = $rc{ $s1 } ;
 			$s2 = $rc{ $s2 } ; 
 		}
 
 		my $key = $c1."_".$s1."_".$c2."_".$s2 ;
-		
 		$rascafConnection{ $key } = 0 ;
 	}
 	
@@ -121,7 +109,7 @@ while ( <FP2> )
 			if ( $c1 gt $c2 )	
 			{
 				($c1, $c2)=($c2, $c1) ;
-				($s1, $s2)=($s2, $s1) ;
+				($s1, $s2)=($s1, $s2) ;
 				$s1 = $rc{ $s1 } ;
 				$s2 = $rc{ $s2 } ; 
 			}
@@ -158,7 +146,7 @@ foreach my $key (keys %rascafConnection )
 	if ( !(defined $trueConnection{ $key } ) ) 
 	{
 		++$FP ;
-		print $key, "\n" ;
+		#print $key, "\n" ;
 	}
 	++$P ;
 }

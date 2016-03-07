@@ -4,7 +4,7 @@
 
 use strict ;
 
-die "usage: a.pl true_connection rascaf.out\n" if ( @ARGV == 0 ) ;
+die "usage: a.pl true_connection lrs_final.path\n" if ( @ARGV == 0 ) ;
 
 my %trueConnection ;
 my %rascafConnection ;
@@ -44,31 +44,20 @@ close FP1 ;
 
 # Read in the rascaf information
 open FP2, $ARGV[1] ;
-my $start = 0 ;
 while ( <FP2> )
 {
 	chomp ;
-	last if ( /WARNING/ ) ;
-	if ( /command/ )
-	{
-		$start = 1 ;
-	}
-	elsif ( $start == 0 ) 
-	{
-		next ;
-	}
+	my @cols = split /->/ ;
 
-	next if ( !/^[0-9]+:/ ) ;
-	my @cols = split ;
+	#print $cols[0], $cols[1], "\n" ;
 
 	my @contigs ;
 	my @strand ;
 	my $line = $_ ;
 
-#3: (chr1_1993:175747999-175965799 217801 1 +) (chr1_1994:175965800-176132443 166644 2 +) (chr1_1996:176133195-176390208 257014 3 +) 
-	for ( my $i = 1 ; $i < @cols ; $i += 4 )
+	for ( my $i = 0 ; $i < @cols ; $i += 2 )
 	{
-		my $c = substr( $cols[$i], 1 ) ;
+		my $c = $cols[$i] ;
 		if ( $c =~ /(.*?):[0-9]/ )
 		{
 			$c = $1 ;
@@ -80,10 +69,16 @@ while ( <FP2> )
 		push @contigs, $c ;
 	}
 
-	for ( my $i = 4 ; $i < @cols ; $i += 4 )
+	for ( my $i = 0 ; $i < @cols ; $i += 2 )
 	{
-		my $c = substr( $cols[$i], 0, 1 ) ;
-		push @strand, $c ;
+		if ( $cols[$i] =~ /\/r/ )
+		{
+			push @strand, "-" ;	
+		}
+		else
+		{
+			push @strand, "+" ;
+		}
 	}
 
 	for ( my $i = 0 ; $i < scalar( @contigs ) - 1 ; ++$i )		
